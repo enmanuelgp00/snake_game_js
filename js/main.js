@@ -43,7 +43,17 @@ document.addEventListener('keydown', (event) => {
 			break;
 	}
  } );
-
+document.addEventListener('click', (e) => {
+	if ( direction.equals( up ) ) {
+		direction.copy( left )
+	} else if (direction.equals( left )) {
+		direction.copy( down );
+	} else if (direction.equals( down )) {
+		direction.copy( right );
+	} else if (direction.equals( right )) {
+		direction.copy( up );
+	}
+});
 for ( let x = 0; x <= board_dimensions.getWidth() + 1; x++) {
 	if ( x == 0 || x == board_dimensions.getWidth() + 1 ) {
 		for ( let y = 1; y <= board_dimensions.getHeight(); y++) {			
