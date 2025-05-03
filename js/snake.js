@@ -9,7 +9,8 @@ class Snake {
 		this.skin = skin;
 		this.field = field;
 		this.headPos = new Point(10, 10);
-		this.bodyPos = [ new Point(9, 10), new Point(8, 10) ]
+		this.bodyPos = [ new Point(9, 10), new Point(8, 10) ];
+		this.trailPos = new Point(8, 10);
 	}
 
 		
@@ -20,12 +21,21 @@ class Snake {
 	getBodyPos() {
 		return this.bodyPos;
 	}
+	getTrailPos() {
+		return this.trailPos;
+	}
+	setTrailPos( point ) {
+		this.trailPos.copy( point );
+	}
+	getTailPos() {
+		return this.bodyPos[ this.bodyPos.length - 1 ];
+	}
 	getAllBody() {
 		let arr = this.getBodyPos().map( e => e);
 		arr.push(this.getHeadPos());
 		return arr;
 	}
-	hasBite (entity) {
+	hasBitten (entity) {
 		if (this.headPos.equals( entity.getPosition() ) ) {
 			return true;
 		}
@@ -33,10 +43,12 @@ class Snake {
 	}
 	grow() {
 		let point = new Point(0, 0);
-		point.copy( this.bodyPos[this.bodyPos.length - 1] );
+		point.copy( this.getTrailPos() );
+		console.log(point);
 		this.bodyPos.push( point );
 	}
 	move( x, y) {
+		this.setTrailPos( this.getTailPos() );
 		for (let i = this.bodyPos.length - 1; i >= 0; i--) {
 			let j = i - 1;
 			if ( i == 0) {				
@@ -46,7 +58,6 @@ class Snake {
 			}
 		}
 		this.headPos.move( x, y );
-		
 	}
 
 	draw() {
@@ -78,41 +89,28 @@ class Snake {
 
 	drawBody() {
 		for ( let i = 0; i < this.bodyPos.length ; i++) {
-			let point = this.bodyPos[i];
 			let div = document.createElement('div');
+			let pos = this.bodyPos[i];
+			let next = this.bodyPos[ i + 1 ];
 			let r = 15;
 			div.className = this.skin;
-			div.style.gridColumn = point.getX();
-			div.style.gridRow = point.getY();
+			div.style.gridColumn = pos.getX();
+			div.style.gridRow = pos.getY();
 
 			// rounds tail of the snake
 			
 			if (i == this.bodyPos.length - 1) {
-				if ( this.bodyPos[i].equals(this.bodyPos[ this.bodyPos.length - 2]) ) {
-					if ( i - 2 < 0) {
-						this.roundBodyPart( div, point, this.headPos );
-					} else {
-						this.roundBodyPart( div, point, this.bodyPos[i - 2] );				
-					}
-				} else {
-					this.roundBodyPart( div, point, this.bodyPos[i - 1] );
-				}
-			} else if ( i == this.bodyPos.length - 2 && this.bodyPos[i].equals(this.bodyPos[ this.bodyPos.length - 1])) {
-				if ( i == 0) {
-					this.roundBodyPart( div, point, this.headPos );
-				} else {
-					this.roundBodyPart( div, point, this.bodyPos[i - 1] );
-					
-				}
+				this.roundBodyPart( div, pos, this.bodyPos[i - 1] );
 			// rounds body
 			} else if ( i == 0 ) {
-				let a = this.getHeading( this.bodyPos[i], this.bodyPos[i + 1] );
-				let b = this.getHeading( this.headPos, this.bodyPos[i] );
-				this.roundCornerIfTurning( div, a, b, r );				
+				let pos_h = this.getHeading( pos, next );
+				let head_h = this.getHeading( this.headPos, pos );
+				this.roundCornerIfTurning( div, pos_h, head_h, r );				
 			} else {
-				let a = this.getHeading( this.bodyPos[i], this.bodyPos[i + 1] );
-				let b = this.getHeading( this.bodyPos[i - 1], this.bodyPos[i] );
-				this.roundCornerIfTurning( div, a, b, r);
+				let prev = this.bodyPos[ i - 1];
+				let pos_h = this.getHeading( pos, next );
+				let prev_h = this.getHeading( prev, pos );
+				this.roundCornerIfTurning( div, pos_h , prev_h , r);
 			}
 			board.appendChild(div);
 			

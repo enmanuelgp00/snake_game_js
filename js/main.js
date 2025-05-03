@@ -157,7 +157,7 @@ function getBorderPoints( dimension ) {
 };
 function checkGameState() {
 	let headPos = snake.getHeadPos();
-		if ( snake.hasBite(apple) ) {
+		if ( snake.hasBitten(apple) ) {
 			snake.grow();
 			audioEat();
 			apple = appleTree.drop();
@@ -169,14 +169,14 @@ function checkGameState() {
 		}
 
 		borders.forEach( e => {
-			if ( snake.hasBite( { getPosition() { return e; } } )) {
+			if ( snake.hasBitten( { getPosition() { return e; } } )) {
 				gameState = GAME_OVER;
 				console.log("I\'ve hit my head against that wall");
 			}
 		});
 		
 		snake.getBodyPos().forEach( e => {
-			if ( snake.hasBite( { getPosition() { return e; } } )) {
+			if ( snake.hasBitten( { getPosition() { return e; } } )) {
 				gameState = GAME_OVER;
 				console.log("I\'ve bitten my tail");
 			}
