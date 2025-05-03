@@ -58,15 +58,32 @@ document.addEventListener('keydown', (event) => {
 	}
  } );
 
-document.addEventListener('click', (e) => {
-	if ( direction.equals( up ) ) {
-		direction.copy( left )
-	} else if (direction.equals( left )) {
-		direction.copy( down );
-	} else if (direction.equals( down )) {
-		direction.copy( right );
-	} else if (direction.equals( right )) {
-		direction.copy( up );
+document.body.addEventListener('click', (e) => {
+	
+	if ( e.clientX < document.body.getBoundingClientRect().width / 2 ) {
+
+		// turn left on click
+		if ( direction.equals( up ) ) {
+			direction.copy( left )
+		} else if (direction.equals( left )) {
+			direction.copy( down );
+		} else if (direction.equals( down )) {
+			direction.copy( right );
+		} else if (direction.equals( right )) {
+			direction.copy( up );
+		}		
+	} else {
+
+		//turn right on click 
+		if ( direction.equals( up ) ) {
+			direction.copy( right )
+		} else if (direction.equals( right )) {
+			direction.copy( down );
+		} else if (direction.equals( down )) {
+			direction.copy( left );
+		} else if (direction.equals( left )) {
+			direction.copy( up );
+		}
 	}
 });
 
@@ -84,7 +101,6 @@ async function play() {
 			}
 			console.log("delicious apple");
 			if (speed > SPEED_MIN ) {
-				console.log(speed);
 				speed -= speed * 0.10;	
 			}
 			
@@ -124,17 +140,22 @@ async function play() {
 
 presentation.addEventListener('click', e => {
 	play();
+	resetGame();
+});
+
+function resetGame() {
 	presentation.style.display = 'none';
 	isGameOver = false;
 	let x = Math.floor( board_dimension.getWidth() / 2 );
 	let y = Math.floor( board_dimension.getHeight() / 2 );
 	snake.setPosition( new Point(x , y));
-	snake.setBody( 10 );
+	snake.setBody( 2 );
 	apple = appleTree.drop();
 	gameState = GAME_PLAY;
 	speed = SPEED_DEFAULT;
-});
-
+	score = 0;
+	score_bar.textContent = score;
+}
 
 function getBorderPoints( dimension ) {
 	let borders = [];

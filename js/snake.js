@@ -1,10 +1,10 @@
 class Snake {
-	constructor(field, skin) {
+	constructor( field, skin ) {
 		this.H_LEFT = -1;
 		this.H_RIGHT = 1;
 		this.H_UP = -2;
 		this.H_DOWN = 2;
-		this.r = '7px'
+		this.r = '8px'
 		
 		this.skin = skin;
 		this.field = field;
