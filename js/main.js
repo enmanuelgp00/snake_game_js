@@ -23,7 +23,7 @@ const GAME_OVER = -1;
 let gameState = GAME_PLAY;
 
 let direction = new Point( 1, 0 );
-
+let lastDirection = new Point(0, 0);
 const left = new Point( -1, 0 );
 const up = new Point( 0, -1 );
 const right = new Point( 1, 0 );
@@ -36,22 +36,22 @@ let isGameOver = false;
 document.addEventListener('keydown', (event) => { 
 	switch ( event.key ) {
 		case 'a' :
-			if ( !direction.equals( right ) ) {
+			if ( !lastDirection.equals( right ) ) {
 				direction.copy( left );
 			}
 			break;
 		case 'w' :
-			if ( !direction.equals( down ) ) {
+			if ( !lastDirection.equals( down ) ) {
 				direction.copy( up );
 			}
 			break;
 		case 'd' :
-			if ( !direction.equals( left ) ) {
+			if ( !lastDirection.equals( left ) ) {
 				direction.copy( right );
 			}
 			break;
 		case 's' :
-			if ( !direction.equals( up ) ) {
+			if ( !lastDirection.equals( up ) ) {
 				direction.copy( down );
 			}
 			break;
@@ -62,26 +62,24 @@ document.body.addEventListener('click', (e) => {
 	
 	if ( e.clientX < document.body.getBoundingClientRect().width / 2 ) {
 
-		// turn left on click
-		if ( direction.equals( up ) ) {
+		if ( lastDirection.equals( up ) ) {
 			direction.copy( left )
-		} else if (direction.equals( left )) {
+		} else if (lastDirection.equals( left )) {
 			direction.copy( down );
-		} else if (direction.equals( down )) {
+		} else if (lastDirection.equals( down )) {
 			direction.copy( right );
-		} else if (direction.equals( right )) {
+		} else if (lastDirection.equals( right )) {
 			direction.copy( up );
 		}		
 	} else {
 
-		//turn right on click 
-		if ( direction.equals( up ) ) {
+		if ( lastDirection.equals( up ) ) {
 			direction.copy( right )
-		} else if (direction.equals( right )) {
+		} else if (lastDirection.equals( right )) {
 			direction.copy( down );
-		} else if (direction.equals( down )) {
+		} else if (lastDirection.equals( down )) {
 			direction.copy( left );
-		} else if (direction.equals( left )) {
+		} else if (lastDirection.equals( left )) {
 			direction.copy( up );
 		}
 	}
@@ -133,6 +131,7 @@ async function play() {
 			default:
 				apple.draw();
 				snake.draw();
+				lastDirection.copy(direction);
 				play();
 		}
 	} , speed );
