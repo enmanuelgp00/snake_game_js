@@ -11,7 +11,7 @@ let apple = appleTree.drop();
 
 
 const SPEED_DEFAULT = 1000;
-const SPEED_MIN  = 500;
+const SPEED_MIN  = 400;
 let speed = SPEED_DEFAULT;
 
 let score = 0;
@@ -93,6 +93,7 @@ async function play() {
 
 		if ( snake.hasBite(apple) ) {
 			snake.grow();
+			audioEat();
 			apple = appleTree.drop();
 			if ( apple == null ) {
 				gameState = GAME_WIN;
@@ -124,7 +125,8 @@ async function play() {
 				board.innerHTML = "YOU WIN!";
 				break;
 
-			case GAME_OVER:				
+			case GAME_OVER:
+				audioLose();			
 				presentation.style.display = 'flex';
 				break;
 
@@ -180,3 +182,29 @@ function getBorderPoints( dimension ) {
 	return borders;
 
 };
+
+function audioEat() {
+	const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+	const oscillator = audioContext.createOscillator();
+	const gainNode = audioContext.createGain();
+	oscillator.connect(gainNode);
+	gainNode.connect(audioContext.destination);
+	oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
+	oscillator.frequency.value = 440;
+	gainNode.gain.value = 0.3;
+	oscillator.start();
+	oscillator.stop(audioContext.currentTime + 0.2 );
+}
+
+function audioLose() {
+	const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+	const oscillator = audioContext.createOscillator();
+	const gainNode = audioContext.createGain();
+	oscillator.connect(gainNode);
+	gainNode.connect(audioContext.destination);
+	oscillator.type = 'sine'; 
+	oscillator.frequency.value = 349.91;
+	gainNode.gain.value = 0.3;
+	oscillator.start();
+	oscillator.stop(audioContext.currentTime + 0.2 );
+}

@@ -80,6 +80,7 @@ class Snake {
 		for ( let i = 0; i < this.bodyPos.length ; i++) {
 			let point = this.bodyPos[i];
 			let div = document.createElement('div');
+			let r = 15;
 			div.className = this.skin;
 			div.style.gridColumn = point.getX();
 			div.style.gridRow = point.getY();
@@ -87,46 +88,37 @@ class Snake {
 			// rounds tail of the snake
 			if ( i == this.bodyPos.length - 1) {
 				this.roundBodyPart( div, point, this.bodyPos[i - 1] );
+
+			// rounds body
 			} else if ( i == 0 ) { 
 				let a = this.getHeading( this.bodyPos[i], this.bodyPos[i + 1] );
 				let b = this.getHeading( this.headPos, this.bodyPos[i] );
-				switch( a - b) {
-					case this.H_UP - this.H_LEFT :
-						div.style.borderRadius = `0px ${this.r} 0px 0px `;
-					break;
-					case this.H_UP - this.H_RIGHT :
-						div.style.borderRadius = ` ${this.r} 0px 0px 0px `;
-					break;
-					case this.H_DOWN - this.H_LEFT :
-						div.style.borderRadius = `0px 0px ${this.r} 0px`;
-					break;
-					case this.H_DOWN - this.H_RIGHT :
-						div.style.borderRadius = `0px 0px 0px ${this.r}`;
-					break;
-				}
+				this.roundCornerIfTurning( div, a, b, r );				
 			} else {
 				let a = this.getHeading( this.bodyPos[i], this.bodyPos[i + 1] );
 				let b = this.getHeading( this.bodyPos[i - 1], this.bodyPos[i] );
-				switch( a - b) {
-					case this.H_UP - this.H_LEFT :
-						div.style.borderRadius = `0px ${this.r} 0px 0px `;
-					break;
-					case this.H_UP - this.H_RIGHT :
-						div.style.borderRadius = ` ${this.r} 0px 0px 0px `;
-					break;
-					case this.H_DOWN - this.H_LEFT :
-						div.style.borderRadius = `0px 0px ${this.r} 0px`;
-					break;
-					case this.H_DOWN - this.H_RIGHT :
-						div.style.borderRadius = `0px 0px 0px ${this.r}`;
-					break;
-				}
+				this.roundCornerIfTurning( div, a, b, r);
 			}
 			board.appendChild(div);
 			
 		}
 	}
-
+	roundCornerIfTurning (el, pos, ref , r)  {
+				switch( pos - ref) {
+					case this.H_UP - this.H_LEFT :
+						el.style.borderRadius = `0px ${r}px 0px 0px`;
+					break;
+					case this.H_UP - this.H_RIGHT :
+						el.style.borderRadius = `${r}px 0px 0px 0px`;
+					break;
+					case this.H_DOWN - this.H_LEFT :
+						el.style.borderRadius = `0px 0px ${r}px 0px`;
+					break;
+					case this.H_DOWN - this.H_RIGHT :
+						el.style.borderRadius = `0px 0px 0px ${r}px`;
+					break;
+				}
+	}
 	roundBodyPart( elm, pos, ref, f ) {
 		let r = this.r
 		switch(this.getHeading( pos, ref )) {
