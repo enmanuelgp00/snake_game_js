@@ -88,37 +88,9 @@ document.body.addEventListener('click', (e) => {
 async function play() {
 	setTimeout( () => {
 		board.innerHTML = '';
-		snake.move(direction.getX(), direction.getY());
-		let headPos = snake.getHeadPos();
+		snake.move(direction.getX(), direction.getY());	
 
-		if ( snake.hasBite(apple) ) {
-			snake.grow();
-			audioEat();
-			apple = appleTree.drop();
-			if ( apple == null ) {
-				gameState = GAME_WIN;
-			}
-			console.log("delicious apple");
-			if (speed > SPEED_MIN ) {
-				speed -= speed * 0.10;	
-			}
-			
-			score_bar.textContent = ++score ;
-		}
-
-		borders.forEach( e => {
-			if ( snake.hasBite( { getPosition() { return e; } } )) {
-				gameState = GAME_OVER;
-				console.log("bitten it border");
-			}
-		});
-		
-		snake.getBodyPos().forEach( e => {
-			if ( snake.hasBite( { getPosition() { return e; } } )) {
-				gameState = GAME_OVER;
-				console.log("My tail tasted like chicken");
-			}
-		} );
+		checkGameState();
 
 		switch ( gameState ) { 
 			case GAME_WIN:
@@ -136,6 +108,7 @@ async function play() {
 				lastDirection.copy(direction);
 				play();
 		}
+		
 	} , speed );
 }
 
@@ -182,6 +155,41 @@ function getBorderPoints( dimension ) {
 	return borders;
 
 };
+function checkGameState() {
+	let headPos = snake.getHeadPos();
+		if ( snake.hasBite(apple) ) {
+			snake.grow();
+			audioEat();
+			apple = appleTree.drop();
+			if ( apple == null ) {
+				gameState = GAME_WIN;
+			}
+			console.log("Delicious apple");
+			handleSpeedUp();
+		}
+
+		borders.forEach( e => {
+			if ( snake.hasBite( { getPosition() { return e; } } )) {
+				gameState = GAME_OVER;
+				console.log("I\'ve hit my head against that wall");
+			}
+		});
+		
+		snake.getBodyPos().forEach( e => {
+			if ( snake.hasBite( { getPosition() { return e; } } )) {
+				gameState = GAME_OVER;
+				console.log("I\'ve bitten my tail");
+			}
+		} );
+}
+
+function handleSpeedUp() {
+	if (speed > SPEED_MIN ) {
+		speed -= speed * 0.10;	
+	}
+	score_bar.textContent = ++score ;
+}
+			
 
 function audioEat() {
 	const audioContext = new (window.AudioContext || window.webkitAudioContext)();

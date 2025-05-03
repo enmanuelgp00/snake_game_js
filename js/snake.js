@@ -86,11 +86,26 @@ class Snake {
 			div.style.gridRow = point.getY();
 
 			// rounds tail of the snake
-			if ( i == this.bodyPos.length - 1) {
-				this.roundBodyPart( div, point, this.bodyPos[i - 1] );
-
+			
+			if (i == this.bodyPos.length - 1) {
+				if ( this.bodyPos[i].equals(this.bodyPos[ this.bodyPos.length - 2]) ) {
+					if ( i - 2 < 0) {
+						this.roundBodyPart( div, point, this.headPos );
+					} else {
+						this.roundBodyPart( div, point, this.bodyPos[i - 2] );				
+					}
+				} else {
+					this.roundBodyPart( div, point, this.bodyPos[i - 1] );
+				}
+			} else if ( i == this.bodyPos.length - 2 && this.bodyPos[i].equals(this.bodyPos[ this.bodyPos.length - 1])) {
+				if ( i == 0) {
+					this.roundBodyPart( div, point, this.headPos );
+				} else {
+					this.roundBodyPart( div, point, this.bodyPos[i - 1] );
+					
+				}
 			// rounds body
-			} else if ( i == 0 ) { 
+			} else if ( i == 0 ) {
 				let a = this.getHeading( this.bodyPos[i], this.bodyPos[i + 1] );
 				let b = this.getHeading( this.headPos, this.bodyPos[i] );
 				this.roundCornerIfTurning( div, a, b, r );				
@@ -125,16 +140,20 @@ class Snake {
 			case this.H_LEFT :
 				elm.style.borderRadius = `${r} 0px 0px ${r}`;
 				if ( f != null ) f();
+				return "left";
 			break;
 			case this.H_RIGHT : 
 				elm.style.borderRadius = `0px ${r} ${r} 0px`;
 				if ( f != null ) f();
+				return "right";
 			break;
 			case this.H_DOWN : 
 				elm.style.borderRadius = `0px 0px ${r} ${r}`;
+				return "down";
 			break;
 			case this.H_UP : 
 				elm.style.borderRadius = `${r} ${r} 0px 0px`;
+				return "up";
 			break;
 		}
 	}
@@ -149,9 +168,9 @@ class Snake {
 			this.bodyPos.push( new Point( head.getX() , head.getY() ));
 		}
 	}
-	getHeading( point, reference ) {
-		let x = point.getX() - reference.getX();
-		let y = point.getY() - reference.getY();
+	getHeading( point, ref ) {
+		let x = point.getX() - ref.getX();
+		let y = point.getY() - ref.getY();
 		let direction = new Point( x, y );
 		
 		if ( x > 0) {
