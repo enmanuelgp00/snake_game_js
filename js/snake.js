@@ -60,4 +60,7 @@ class Snake {
 			board.appendChild(div);
 		} );
 	}
+	setPosition( point ) {
+		this.headPos = point;
+	}
 }

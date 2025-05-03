@@ -117,4 +117,5 @@ presentation.addEventListener('click', e => {
 	play();
 	presentation.style.display = 'none';
 	isGameOver = false;
+	snake.setPosition( new Point(10 , 10));
 });
