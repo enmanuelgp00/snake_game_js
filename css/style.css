@@ -17,8 +17,8 @@ body, .snake {
 #game-board {
 	border-radius: 100px;
 	display: grid;
-	grid-template-columns: repeat( 15, 20px );
-	grid-template-rows: repeat( 15, 20px )
+	grid-template-columns: repeat( 5, 20px );
+	grid-template-rows: repeat( 5, 20px )
 }
 
 .game-border-1 {
@@ -74,8 +74,14 @@ body, .snake {
 	width: 300px;
 }
 
-#sanke {
+#snake {
 	border: #5a5a5a 1 dotted;
+}
+
+#snake_head {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .apple {
