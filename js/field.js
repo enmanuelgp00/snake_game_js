@@ -13,8 +13,7 @@ class Field {
 	getAvailableArea() {
 		let area = [];
 		let ocupatedArea = this.snake.getAllBody().map( e => e);
-		
-		console.log(this.applesPos);
+		console.log(this.applesPos)
 		for ( let apple of this.applesPos) {
 			ocupatedArea.push( apple );
 		}

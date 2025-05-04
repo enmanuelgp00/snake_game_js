@@ -127,6 +127,7 @@ function resetGame() {
 	let y = Math.floor( board_dimension.getHeight() / 2 );
 	snake.setPosition( new Point(x , y));
 	snake.setBody( 2 );
+	field.clearApplesPos();
 	apples = field.appleTree.drop( APPLE_COUNT );
 	gameState = GAME_PLAY;
 	speed = SPEED_DEFAULT;

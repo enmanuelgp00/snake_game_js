@@ -5,9 +5,7 @@ class AppleTree {
 
 	drop( count ) {
 		let apples = [];
-		let map = field.getAvailableArea();
-		//field.clearApplesPos();
-		
+		let map = field.getAvailableArea();		
 		for ( let i = 0; i < count; i++) {
 			if ( map.length > 0 ) {
 				let j = Math.floor(Math.random() * map.length );
