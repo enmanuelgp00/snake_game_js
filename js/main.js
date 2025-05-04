@@ -102,6 +102,7 @@ async function play() {
 			case GAME_OVER:
 				audioLose();			
 				presentation.style.display = 'flex';
+				getHighScore();
 				break;
 
 			default:
