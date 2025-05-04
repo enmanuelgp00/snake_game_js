@@ -17,8 +17,8 @@ body, .snake {
 #game-board {
 	border-radius: 100px;
 	display: grid;
-	grid-template-columns: repeat( 10, 20px );
-	grid-template-rows: repeat( 10, 20px )
+	grid-template-columns: repeat( 4, 20px );
+	grid-template-rows: repeat( 4, 20px )
 }
 
 .game-border-1 {

@@ -5,11 +5,10 @@ const scoreView = document.getElementById('score');
 const highScoreView = document.getElementById('high_score');
 
 const snake = new Snake(board, "snake");
+
 const field = new Field( board, snake );
-const appleTree = new AppleTree( field , "apple");
 
-let apple = appleTree.drop();
-
+let apples = field.appleTree.drop( 2 );
 
 const SPEED_DEFAULT = 1000;
 const SPEED_MIN  = 400;
@@ -106,7 +105,9 @@ async function play() {
 				break;
 
 			default:
-				apple.draw();
+				apples.forEach( apple => {
+					if (apple != null ) apple.draw() ;
+				});
 				snake.draw();
 				lastDirection.copy(direction);
 				play();
@@ -127,7 +128,7 @@ function resetGame() {
 	let y = Math.floor( board_dimension.getHeight() / 2 );
 	snake.setPosition( new Point(x , y));
 	snake.setBody( 2 );
-	apple = appleTree.drop();
+	apple = field.appleTree.drop( 2 );
 	gameState = GAME_PLAY;
 	speed = SPEED_DEFAULT;
 	highScoreView.textContent = getHighScore();
@@ -162,30 +163,36 @@ function getBorderPoints( dimension ) {
 
 function checkGameState() {
 	let headPos = snake.getHeadPos();
-		if ( snake.hasBitten(apple) ) {
-			snake.grow();
-			audioEat();
-			apple = appleTree.drop();
-			if ( apple == null ) {
-				gameState = GAME_WIN;
+	for ( let i = 0 ; i < apples.length; i++ ) {
+			if ( snake.hasBitten(apples[i]) ) {			
+				snake.grow();
+				audioEat();
+				field.assimilatedApple( apples[i].getPosition() );
+				apples = apples.filter( a => a !== apples[i] );
+				if (  apples.length == 0 ) {
+					gameState = GAME_WIN;
+				} else {
+					let newapple = field.appleTree.drop( 1 )[0];
+					if ( newapple != undefined ) apples.push( newapple );
+					console.log("Delicious apple");
+					handleSpeedUp();					
+				}
 			}
-			console.log("Delicious apple");
-			handleSpeedUp();
+	}	
+	
+	borders.forEach( e => {
+		if ( snake.hasBitten( { getPosition() { return e; } } )) {
+			gameState = GAME_OVER;
+			console.log("I\'ve hit my head against that wall");
 		}
-
-		borders.forEach( e => {
-			if ( snake.hasBitten( { getPosition() { return e; } } )) {
-				gameState = GAME_OVER;
-				console.log("I\'ve hit my head against that wall");
-			}
-		});
-		
-		snake.getBodyPos().forEach( e => {
-			if ( snake.hasBitten( { getPosition() { return e; } } )) {
-				gameState = GAME_OVER;
-				console.log("I\'ve bitten my tail");
-			}
-		} );
+	});
+	
+	snake.getBodyPos().forEach( e => {
+		if ( snake.hasBitten( { getPosition() { return e; } } )) {
+			gameState = GAME_OVER;
+			console.log("I\'ve bitten my tail");
+		}
+	} );
 }
 
 function handleSpeedUp() {
