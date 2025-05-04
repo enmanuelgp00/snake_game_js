@@ -1,7 +1,8 @@
 const board = document.getElementById('game-board');
 const board_dimension = new Dimension(board);
 const presentation = document.getElementById('presentation');
-const score_bar = document.getElementById('score');
+const scoreView = document.getElementById('score');
+const highScoreView = document.getElementById('high_score');
 
 const snake = new Snake(board, "snake");
 const field = new Field( board, snake );
@@ -15,19 +16,20 @@ const SPEED_MIN  = 400;
 let speed = SPEED_DEFAULT;
 
 let score = 0;
+highScoreView.textContent = getHighScore();
 
 const GAME_PLAY = 0;
 const GAME_WIN = 1;
 const GAME_OVER = -1;
-
 let gameState = GAME_PLAY;
+
+const D_UP = new Point( 0, -1 );
+const D_DOWN  = new Point( 0, 1 );
+const D_LEFT = new Point( -1, 0 );
+const D_RIGHT = new Point( 1, 0 );
 
 let direction = new Point( 1, 0 );
 let lastDirection = new Point(0, 0);
-const left = new Point( -1, 0 );
-const up = new Point( 0, -1 );
-const right = new Point( 1, 0 );
-const down  = new Point( 0, 1 );
 
 
 let borders = getBorderPoints( board_dimension );
@@ -36,23 +38,23 @@ let isGameOver = false;
 document.addEventListener('keydown', (event) => { 
 	switch ( event.key ) {
 		case 'a' :
-			if ( !lastDirection.equals( right ) ) {
-				direction.copy( left );
+			if ( !lastDirection.equals( D_RIGHT ) ) {
+				direction.copy( D_LEFT );
 			}
 			break;
 		case 'w' :
-			if ( !lastDirection.equals( down ) ) {
-				direction.copy( up );
+			if ( !lastDirection.equals( D_DOWN ) ) {
+				direction.copy( D_UP );
 			}
 			break;
 		case 'd' :
-			if ( !lastDirection.equals( left ) ) {
-				direction.copy( right );
+			if ( !lastDirection.equals( D_LEFT ) ) {
+				direction.copy( D_RIGHT );
 			}
 			break;
 		case 's' :
-			if ( !lastDirection.equals( up ) ) {
-				direction.copy( down );
+			if ( !lastDirection.equals( D_UP ) ) {
+				direction.copy( D_DOWN );
 			}
 			break;
 	}
@@ -62,25 +64,25 @@ document.body.addEventListener('click', (e) => {
 	
 	if ( e.clientX < document.body.getBoundingClientRect().width / 2 ) {
 
-		if ( lastDirection.equals( up ) ) {
-			direction.copy( left )
-		} else if (lastDirection.equals( left )) {
-			direction.copy( down );
-		} else if (lastDirection.equals( down )) {
-			direction.copy( right );
-		} else if (lastDirection.equals( right )) {
-			direction.copy( up );
+		if ( lastDirection.equals( D_UP ) ) {
+			direction.copy( D_LEFT )
+		} else if (lastDirection.equals( D_LEFT )) {
+			direction.copy( D_DOWN );
+		} else if (lastDirection.equals( D_DOWN )) {
+			direction.copy( D_RIGHT );
+		} else if (lastDirection.equals( D_RIGHT )) {
+			direction.copy( D_UP );
 		}		
 	} else {
 
-		if ( lastDirection.equals( up ) ) {
-			direction.copy( right )
-		} else if (lastDirection.equals( right )) {
-			direction.copy( down );
-		} else if (lastDirection.equals( down )) {
-			direction.copy( left );
-		} else if (lastDirection.equals( left )) {
-			direction.copy( up );
+		if ( lastDirection.equals( D_UP ) ) {
+			direction.copy( D_RIGHT )
+		} else if (lastDirection.equals( D_RIGHT )) {
+			direction.copy( D_DOWN );
+		} else if (lastDirection.equals( D_DOWN )) {
+			direction.copy( D_LEFT );
+		} else if (lastDirection.equals( D_LEFT )) {
+			direction.copy( D_UP );
 		}
 	}
 });
@@ -127,8 +129,9 @@ function resetGame() {
 	apple = appleTree.drop();
 	gameState = GAME_PLAY;
 	speed = SPEED_DEFAULT;
+	highScoreView.textContent = getHighScore();
 	score = 0;
-	score_bar.textContent = score;
+	scoreView.textContent = score;
 }
 
 function getBorderPoints( dimension ) {
@@ -155,6 +158,7 @@ function getBorderPoints( dimension ) {
 	return borders;
 
 };
+
 function checkGameState() {
 	let headPos = snake.getHeadPos();
 		if ( snake.hasBitten(apple) ) {
@@ -187,9 +191,18 @@ function handleSpeedUp() {
 	if (speed > SPEED_MIN ) {
 		speed -= speed * 0.10;	
 	}
-	score_bar.textContent = ++score ;
+	scoreView.textContent = ++score ;
 }
-			
+
+function getHighScore() {
+	const HIGH_SCORE = "HIGH_SCORE";
+	let hs =  localStorage.getItem(HIGH_SCORE);
+	if ( hs == null || hs < score ) {
+		hs = score;
+	}
+	localStorage.setItem(HIGH_SCORE, hs);
+	return hs;
+}
 
 function audioEat() {
 	const audioContext = new (window.AudioContext || window.webkitAudioContext)();

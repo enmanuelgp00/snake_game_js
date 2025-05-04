@@ -44,7 +44,6 @@ class Snake {
 	grow() {
 		let point = new Point(0, 0);
 		point.copy( this.getTrailPos() );
-		console.log(point);
 		this.bodyPos.push( point );
 	}
 	move( x, y) {
@@ -69,7 +68,7 @@ class Snake {
 		let head = document.createElement('div');
 		let eyes = [ document.createElement('div'), document.createElement('div') ];
 		eyes.forEach( eye => {
-			eye.style.background = "#fff" ;
+			eye.style.background = "#d8ddca" ;
 			eye.style.width = "4px";
 			eye.style.height = "3px";
 			eye.style.borderRadius = "2px"

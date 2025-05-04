@@ -49,15 +49,14 @@ body, .snake {
 #score {
 	color: #abb78a;
 }
-#score, #highScore {
+#score, #high_score {
 	font-size: 40px;
 	margin: 7px 3px;
 	
 }
 
-#highScore {
+#high_score {
 	color: #d8ddca;
-	display: none;
 }
 
 #presentation {
