@@ -13,7 +13,8 @@ class Field {
 	getAvailableArea() {
 		let area = [];
 		let ocupatedArea = this.snake.getAllBody().map( e => e);
-
+		
+		console.log(this.applesPos);
 		for ( let apple of this.applesPos) {
 			ocupatedArea.push( apple );
 		}
@@ -43,5 +44,8 @@ class Field {
 	}
 	assimilatedApple( point ) {
 		this.applesPos = this.applesPos.filter( pos => pos !== point );
+	}
+	clearApplesPos() {
+		this.applesPos = [];
 	}
 }

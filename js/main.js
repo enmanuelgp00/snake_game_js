@@ -7,8 +7,7 @@ const highScoreView = document.getElementById('high_score');
 const snake = new Snake(board, "snake");
 
 const field = new Field( board, snake );
-
-let apples = field.appleTree.drop( 2 );
+const APPLE_COUNT = 10;
 
 const SPEED_DEFAULT = 1000;
 const SPEED_MIN  = 400;
@@ -128,7 +127,7 @@ function resetGame() {
 	let y = Math.floor( board_dimension.getHeight() / 2 );
 	snake.setPosition( new Point(x , y));
 	snake.setBody( 2 );
-	apple = field.appleTree.drop( 2 );
+	apples = field.appleTree.drop( APPLE_COUNT );
 	gameState = GAME_PLAY;
 	speed = SPEED_DEFAULT;
 	highScoreView.textContent = getHighScore();
@@ -163,20 +162,27 @@ function getBorderPoints( dimension ) {
 
 function checkGameState() {
 	let headPos = snake.getHeadPos();
+	
+	if (  apples.length == 0 ) {
+		console.log( "WIN")
+		gameState = GAME_WIN;
+		return undefined;
+	}  
+	
 	for ( let i = 0 ; i < apples.length; i++ ) {
 			if ( snake.hasBitten(apples[i]) ) {			
 				snake.grow();
 				audioEat();
 				field.assimilatedApple( apples[i].getPosition() );
-				apples = apples.filter( a => a !== apples[i] );
-				if (  apples.length == 0 ) {
-					gameState = GAME_WIN;
-				} else {
-					let newapple = field.appleTree.drop( 1 )[0];
-					if ( newapple != undefined ) apples.push( newapple );
-					console.log("Delicious apple");
-					handleSpeedUp();					
-				}
+				
+				
+				apples = apples.filter( a => a !== apples[i] );				
+				let newapple = field.appleTree.drop( 1 )[0];
+				if ( newapple != undefined ) apples.push( newapple );
+				
+				console.log("Delicious apple");
+				handleSpeedUp();					
+				
 			}
 	}	
 	
