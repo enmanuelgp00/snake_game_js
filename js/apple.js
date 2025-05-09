@@ -3,6 +3,11 @@ class Apple {
 		this.point = point;
 		this.field = field;
 		this.color = color;
+		this.isIncreasing = true;
+		this.scale = 1.0;
+		this.SCALE_RATE = 0.1;
+		this.MAX_SCALE = 1.2;
+		this.MIN_SCALE = 0.9;
 	}
 	getPosition() {
 		return this.point;
@@ -29,9 +34,24 @@ class Apple {
 		apple.style.gridColumn = this.point.getX();
 		apple.style.gridRow = this.point.getY();
 		apple.style.position = 'relative';
-		// apple.style.display = 'flex';
 		apple.appendChild(reflect);
 		apple.appendChild(leaf);
+		apple.style.scale = this.scale;
+		this.updateScale();
 		this.field.appendChild(apple);
+	}
+	updateScale () {
+		if ( this.isIncreasing ) {
+			if ( this.scale >= this.MAX_SCALE - this.SCALE_RATE ) {
+				this.isIncreasing = false;
+			}
+			this.scale += this.SCALE_RATE;
+			
+		} else {
+			if ( this.scale <= this.MIN_SCALE + this.SCALE_RATE ) {
+				this.isIncreasing = true;
+			}
+			this.scale -= this.SCALE_RATE;
+		}
 	}
 }

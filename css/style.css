@@ -21,6 +21,7 @@ body, .snake {
 	grid-template-rows: repeat( 10, 20px )
 }
 
+
 .game-border-1 {
 	border: #595f43 solid 10px;
 	border-radius: 30px;
@@ -79,11 +80,9 @@ body, .snake {
 	text-transform: capitalize;
 	font-family: 'retro_font', monospace;
 }
-
-#snake {
-	border: #5a5a5a 1 dotted;
+.snake {
+	background: #5588ff;
 }
-
 #snake_head {
 	display: flex;
 	justify-content: center;
@@ -97,3 +96,8 @@ body, .snake {
 	border-radius: 8px;
 		
 }
+.apple:nth-child(even) {
+	background: #f00;
+}
+
+
