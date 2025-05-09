@@ -1,10 +1,12 @@
 class Snake {
 	constructor( field, skin ) {
-		this.H_LEFT = -1;
-		this.H_RIGHT = 1;
-		this.H_UP = -2;
-		this.H_DOWN = 2;
+		this.H_LEFT = 1;
+		this.H_RIGHT = -1;
+		this.H_UP = 2;
+		this.H_DOWN = -2;
 		this.r = '8px'
+		
+		this.border_style ='#000000 dotted 2px';
 		
 		this.skin = skin;
 		this.field = field;
@@ -119,15 +121,23 @@ class Snake {
 				switch( pos - ref) {
 					case this.H_UP - this.H_LEFT :
 						el.style.borderRadius = `0px ${r}px 0px 0px`;
+						el.style.borderTop = this.border_style;
+						el.style.borderRight = this.border_style;
 					break;
-					case this.H_UP - this.H_RIGHT :
+					case this.H_UP - this.H_RIGHT:
 						el.style.borderRadius = `${r}px 0px 0px 0px`;
+						el.style.borderTop = this.border_style;
+						el.style.borderLeft= this.border_style;
 					break;
-					case this.H_DOWN - this.H_LEFT :
+					case this.H_DOWN - this.H_LEFT:
 						el.style.borderRadius = `0px 0px ${r}px 0px`;
+						el.style.borderDown = this.border_style;
+						el.style.borderRight = this.border_style;
 					break;
-					case this.H_DOWN - this.H_RIGHT :
+					case this.H_DOWN - this.H_RIGHT:
 						el.style.borderRadius = `0px 0px 0px ${r}px`;
+						el.style.borderDown = this.border_style;
+						el.style.borderLeft = this.border_style;
 					break;
 				}
 	}

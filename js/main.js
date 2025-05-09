@@ -95,6 +95,7 @@ async function play() {
 		switch ( gameState ) { 
 			case GAME_WIN:
 				board.innerHTML = "YOU WIN!";
+				getHighScore();
 				break;
 
 			case GAME_OVER:
@@ -219,23 +220,22 @@ function getHighScore() {
 	return hs;
 }
 
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const gainNode = audioContext.createGain();
+
 function audioEat() {
-	const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 	const oscillator = audioContext.createOscillator();
-	const gainNode = audioContext.createGain();
 	oscillator.connect(gainNode);
 	gainNode.connect(audioContext.destination);
 	oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
 	oscillator.frequency.value = 440;
 	gainNode.gain.value = 0.3;
 	oscillator.start();
-	oscillator.stop(audioContext.currentTime + 0.2 );
+	oscillator.stop( audioContext.currentTime + 0.2 );
 }
 
 function audioLose() {
-	const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 	const oscillator = audioContext.createOscillator();
-	const gainNode = audioContext.createGain();
 	oscillator.connect(gainNode);
 	gainNode.connect(audioContext.destination);
 	oscillator.type = 'sine'; 
