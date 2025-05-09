@@ -70,11 +70,22 @@ class Snake {
 		let head = document.createElement('div');
 		let eyes = [ document.createElement('div'), document.createElement('div') ];
 		eyes.forEach( eye => {
-			eye.style.background = "#d8ddca" ;
-			eye.style.width = "4px";
-			eye.style.height = "3px";
+			let pupil = document.createElement('div');
+			pupil.style.background = '#000';
+			pupil.style.width = "3px";
+			pupil.style.height = "3px";
+			pupil.style.borderRadius = "2px"
+			
+
+			eye.style.background = "#fff" ;
+			eye.style.display = 'flex';
+			eye.style.justifyContent = 'center';
+			eye.style.alignItems = 'center';
+			eye.style.width = "6px";
+			eye.style.height = "5px";
 			eye.style.borderRadius = "2px"
 			eye.style.margin = '2px'
+			eye.appendChild(pupil);
 			head.appendChild(eye);
 		} );
 
