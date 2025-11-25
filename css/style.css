@@ -14,6 +14,7 @@ body, .snake {
 	background-color: #414141;
 }
 
+
 #game-board {
 	border-radius: 100px;
 	display: grid;
@@ -98,6 +99,11 @@ body, .snake {
 }
 .apple:nth-child(even) {
 	background: #f00;
+}
+
+#controlsMessage {
+	color: #abb78a;
+
 }
 
 

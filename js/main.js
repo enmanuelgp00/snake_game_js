@@ -1,4 +1,5 @@
 const board = document.getElementById('game-board');
+const controlsMessage = document.getElementById('controlsMessage');
 const board_dimension = new Dimension(board);
 const presentation = document.getElementById('presentation');
 const scoreView = document.getElementById('score');
@@ -99,8 +100,8 @@ async function play() {
 				break;
 
 			case GAME_OVER:
-				audioLose();			
-				presentation.style.display = 'flex';
+				audioLose();
+				showPresentation( true );
 				getHighScore();
 				break;
 
@@ -122,7 +123,7 @@ presentation.addEventListener('click', e => {
 });
 
 function resetGame() {
-	presentation.style.display = 'none';
+	showPresentation( false );
 	isGameOver = false;
 	let x = Math.floor( board_dimension.getWidth() / 2 );
 	let y = Math.floor( board_dimension.getHeight() / 2 );
@@ -223,18 +224,41 @@ function getHighScore() {
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNode = audioContext.createGain();
 
-function audioEat() {
+function toneA() {
 	const oscillator = audioContext.createOscillator();
 	oscillator.connect(gainNode);
 	gainNode.connect(audioContext.destination);
 	oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
-	oscillator.frequency.value = 440;
+	oscillator.frequency.value = 440; //A
 	gainNode.gain.value = 0.3;
 	oscillator.start();
 	oscillator.stop( audioContext.currentTime + 0.2 );
 }
 
-function audioLose() {
+function toneBb() {
+	const oscillator = audioContext.createOscillator();
+	oscillator.connect(gainNode);
+	gainNode.connect(audioContext.destination);
+	oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
+	oscillator.frequency.value = 466.16; //B
+	gainNode.gain.value = 0.3;
+	oscillator.start();
+	oscillator.stop( audioContext.currentTime + 0.2 );
+}
+
+
+function toneC() {
+	const oscillator = audioContext.createOscillator();
+	oscillator.connect(gainNode);
+	gainNode.connect(audioContext.destination);
+	oscillator.type = 'sine'; 
+	oscillator.frequency.value = 523.251; //C
+	gainNode.gain.value = 0.3;
+	oscillator.start();
+	oscillator.stop(audioContext.currentTime + 0.2 );
+}
+
+function toneF() {
 	const oscillator = audioContext.createOscillator();
 	oscillator.connect(gainNode);
 	gainNode.connect(audioContext.destination);
@@ -243,4 +267,27 @@ function audioLose() {
 	gainNode.gain.value = 0.3;
 	oscillator.start();
 	oscillator.stop(audioContext.currentTime + 0.2 );
+}
+
+function audioStart() { 
+	toneBb()
+}
+function audioEat() {
+	toneC()
+}
+function audioLose() { 
+	toneF();
+}
+
+
+function showPresentation( t ) {
+	if ( t ) {
+		controlsMessage.style.display = 'block'
+		presentation.style.display = 'flex';	
+	} else {
+		audioStart()
+		controlsMessage.style.display = 'none'
+		presentation.style.display = 'none';	
+		
+	}
 }
